@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key and Mouse Interaction App</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: url('paramo.png') no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    .circle {
+      position: relative;
+      width: 70vmin;
+      height: 70vmin;
+      min-width: 600px;
+      min-height: 600px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(220, 255, 220, 0.3);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes breathing {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.03);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .character {
+      position: absolute;
+      width: calc(70vmin * 0.25);
+      height: calc(70vmin * 0.25);
+      min-width: 150px;
+      min-height: 150px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      transform-origin: center;
+    }
+
+    #up {
+      top: 0;
+      left: 50%;
+      animation: breathing 4s ease-in-out infinite;
+    }
+
+    #down {
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      animation: breathing-down 3.8s ease-in-out infinite;
+    }
+
+    #left {
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      animation: breathing-left 4.2s ease-in-out infinite;
+    }
+
+    #right {
+      right: 0;
+      top: 50%;
+      transform: translate(50%, -50%);
+      animation: breathing-right 3.6s ease-in-out infinite;
+    }
+
+    #space {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: breathing-center 4.4s ease-in-out infinite;
+    }
+
+    @keyframes breathing-down {
+      0% {
+        transform: translate(-50%, 50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, 50%) scale(1.03);
+      }
+      100% {
+        transform: translate(-50%, 50%) scale(1);
+      }
+    }
+
+    @keyframes breathing-left {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.03);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes breathing-right {
+      0% {
+        transform: translate(50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(50%, -50%) scale(1.03);
+      }
+      100% {
+        transform: translate(50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes breathing-center {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.03);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .active#up {
+      animation: none;
+      transform: translate(-50%, -50%) scale(1.4);
+    }
+
+    .active#down {
+      animation: none;
+      transform: translate(-50%, 50%) scale(1.4);
+    }
+
+    .active#left {
+      animation: none;
+      transform: translate(-50%, -50%) scale(1.4);
+    }
+
+    .active#right {
+      animation: none;
+      transform: translate(50%, -50%) scale(1.4);
+    }
+
+    .active#space {
+      animation: none;
+      transform: translate(-50%, -50%) scale(1.4);
+    }
+
+     /*Codigo de animación de insectos*/
+     @keyframes circularMotionButterfly1 {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg) translateX(600px) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg) translateX(600px) rotate(-360deg);
+      }
+    }
+
+    @keyframes circularMotionButterfly2 {
+      0% {
+        transform: translate(-50%, -50%) rotate(72deg) translateX(600px) rotate(-72deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(432deg) translateX(600px) rotate(-432deg);
+      }
+    }
+
+    @keyframes circularMotionButterfly3 {
+      0% {
+        transform: translate(-50%, -50%) rotate(144deg) translateX(600px) rotate(-144deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(504deg) translateX(600px) rotate(-504deg);
+      }
+    }
+
+    @keyframes circularMotionButterfly4 {
+      0% {
+        transform: translate(-50%, -50%) rotate(216deg) translateX(600px) rotate(-216deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(576deg) translateX(600px) rotate(-576deg);
+      }
+    }
+
+    @keyframes circularMotionButterfly5 {
+      0% {
+        transform: translate(-50%, -50%) rotate(288deg) translateX(600px) rotate(-288deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(648deg) translateX(600px) rotate(-648deg);
+      }
+    }
+
+    .background-creature {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0.8;
+      pointer-events: none;
+      left: 50%;
+      top: 50%;
+      z-index: -2;
+    }
+
+    #butterfly1 {
+      animation: circularMotionButterfly1 30s infinite linear;
+    }
+
+    #butterfly2 {
+      animation: circularMotionButterfly2 25s infinite linear reverse;
+    }
+
+    #butterfly3 {
+      animation: circularMotionButterfly3 35s infinite linear;
+    }
+
+    #butterfly4 {
+      animation: circularMotionButterfly4 28s infinite linear reverse;
+    }
+
+    #butterfly5 {
+      animation: circularMotionButterfly5 32s infinite linear;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="circle">
+    <img src="jaguar.png" id="up" class="character";">
+    <img src="musgo.png" id="down" class="character";">
+    <img src="zorro.png" id="left" class="character";">
+    <img src="oso.png" id="right" class="character";">
+    <img src="robot.png" id="space" class="character";">
+
+    <img src="mariposa.png" id="butterfly1" class="background-creature">
+    <img src="mariposa.png" id="butterfly2" class="background-creature">
+    <img src="mariposa.png" id="butterfly3" class="background-creature">
+    <img src="mariposa.png" id="butterfly4" class="background-creature">
+    <img src="mariposa.png" id="butterfly5" class="background-creature">
+  </div>
+
+  <audio id="sound-up" src="jaguar.mp3"></audio>
+  <audio id="sound-down" src="musgo.mp3"></audio>
+  <audio id="sound-left" src="zorro.mp3"></audio>
+  <audio id="sound-right" src="oso.mp3"></audio>
+  <audio id="sound-space" src="robot.mp3"></audio>
+  <audio id="background-sound" src="soulSound.mp3" loop></audio>
+  
+
+  <script>
+    // Reproducir el sonido de fondo al cargar la página
+     // Crear un botón invisible para iniciar el sonido
+     const startAudioButton = document.createElement('button');
+    startAudioButton.style.position = 'fixed';
+    startAudioButton.style.top = '0';
+    startAudioButton.style.left = '0';
+    startAudioButton.style.opacity = '0';
+    startAudioButton.textContent = 'Iniciar Audio';
+    document.body.appendChild(startAudioButton);
+
+    // Iniciar el sonido cuando se hace clic en cualquier parte
+    const startBackgroundSound = () => {
+      const backgroundSound = document.getElementById('background-sound');
+      backgroundSound.volume = 0.1;
+      backgroundSound.play();
+      // Remover el botón después de iniciar
+      startAudioButton.remove();
+      // Remover los event listeners
+      document.removeEventListener('click', startBackgroundSound);
+      document.removeEventListener('keydown', startBackgroundSound);
+    };
+
+    // Agregar listeners para iniciar el sonido
+    document.addEventListener('click', startBackgroundSound);
+    document.addEventListener('keydown', startBackgroundSound);
+    
+    //Mapeo de teclas a elementos y sonidos
+    const keyMap = {
+      'ArrowUp': { id: 'up', sound: 'sound-up', animal: 'Jaguar' },
+      'ArrowDown': { id: 'down', sound: 'sound-down', animal: 'Musgo' },
+      'ArrowLeft': { id: 'left', sound: 'sound-left', animal: 'Zorro' },
+      'ArrowRight': { id: 'right', sound: 'sound-right', animal: 'Oso' },
+      ' ': { id: 'space', sound: 'sound-space', animal: 'Robot' },
+    };
+
+    // Objeto para rastrear el estado de las teclas y el tiempo de la última pulsación
+    const keyState = {};
+    const lastKeyPress = {};
+    const doublePressThreshold = 300; // milisegundos para detectar doble pulsación
+
+    const activate = (id, soundId, animal) => {
+      document.getElementById(id).classList.add('active');
+      const audio = document.getElementById(soundId);
+      
+      // Verificar si es una doble pulsación
+      const now = Date.now();
+      if (lastKeyPress[soundId] && (now - lastKeyPress[soundId] < doublePressThreshold)) {
+        // Es una doble pulsación, reiniciar el audio
+        audio.currentTime = 0;
+        console.log(`Reiniciando audio de ${animal}`);
+      }
+      lastKeyPress[soundId] = now;
+      
+      audio.play();
+      console.log(`Activando ${animal}:`);
+      console.log(`- Imagen: ${animal.toLowerCase()}.png`);
+      console.log(`- Sonido: ${animal.toLowerCase()}.mp3`);
+    };
+
+    const deactivate = (id, soundId, animal) => {
+      document.getElementById(id).classList.remove('active');
+      document.getElementById(soundId).pause();
+      console.log(`Desactivando ${animal}`);
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (keyMap[e.key] && !keyState[e.key]) {
+        keyState[e.key] = true;
+        activate(keyMap[e.key].id, keyMap[e.key].sound, keyMap[e.key].animal);
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (keyMap[e.key]) {
+        keyState[e.key] = false;
+        deactivate(keyMap[e.key].id, keyMap[e.key].sound, keyMap[e.key].animal);
+      }
+    });
+
+    // Mouse click detection
+    const centerImage = document.getElementById('space');
+    let isMouseDown = false;
+
+    centerImage.addEventListener('mousedown', () => {
+      if (!isMouseDown) {
+        isMouseDown = true;
+        centerImage.classList.add('active');
+        const clickSound = document.getElementById('sound-click');
+        clickSound.currentTime = 0;
+        clickSound.play();
+        console.log('Activando Robot (por clic):');
+        console.log('- Imagen: robot.png');
+        console.log('- Sonido: click.mp3');
+      }
+    });
+
+    centerImage.addEventListener('mouseup', () => {
+      isMouseDown = false;
+      centerImage.classList.remove('active');
+      const clickSound = document.getElementById('sound-click');
+      clickSound.pause();
+      clickSound.currentTime = 0;
+      console.log('Desactivando Robot (por clic)');
+    });
+  </script>
+</body>
+</html>
