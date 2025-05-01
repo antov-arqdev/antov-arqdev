@@ -24,8 +24,8 @@
       position: relative;
       width: 70vmin;
       height: 70vmin;
-      min-width: 600px;
-      min-height: 600px;
+      min-width: auto;
+      min-height: auto;
       border-radius: 50%;
       display: flex;
       justify-content: center;
@@ -35,6 +35,55 @@
       box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
+    @media (max-width: 768px) {
+      .circle {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        flex-direction: column;
+        padding: 20px 0;
+        min-height: 100vh;
+      }
+
+      .character {
+        position: relative !important;
+        width: 25vh !important;
+        height: 25vh !important;
+        min-width: auto !important;
+        min-height: auto !important;
+        margin: 15px auto !important;
+        transform: none !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+      }
+
+      #up, #down, #left, #right, #space {
+        animation: breathing-mobile 4s ease-in-out infinite !important;
+      }
+
+      .active#up, .active#down, .active#left, .active#right, .active#space {
+        animation: none !important;
+        transform: scale(1.4) !important;
+      }
+
+      @keyframes breathing-mobile {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .background-creature {
+        display: none;
+      }
+    }
     @keyframes breathing {
       0% {
         transform: translate(-50%, -50%) scale(1);
