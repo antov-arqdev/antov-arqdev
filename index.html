@@ -329,31 +329,33 @@
 
   <script>
     // Reproducir el sonido de fondo al cargar la página
-     // Crear un botón invisible para iniciar el sonido
-     const startAudioButton = document.createElement('button');
-    startAudioButton.style.position = 'fixed';
-    startAudioButton.style.top = '0';
-    startAudioButton.style.left = '0';
-    startAudioButton.style.opacity = '0';
-    startAudioButton.textContent = 'Iniciar Audio';
-    document.body.appendChild(startAudioButton);
-
-    // Iniciar el sonido cuando se hace clic en cualquier parte
-    const startBackgroundSound = () => {
+    window.addEventListener('load', () => {
       const backgroundSound = document.getElementById('background-sound');
       backgroundSound.volume = 0.1;
-      backgroundSound.play();
-      // Remover el botón después de iniciar
-      startAudioButton.remove();
-      // Remover los event listeners
-      document.removeEventListener('click', startBackgroundSound);
-      document.removeEventListener('keydown', startBackgroundSound);
-    };
+      backgroundSound.play().catch(error => {
+        console.log('Reproducción automática bloqueada por el navegador:', error);
+        // Crear un botón invisible para iniciar el sonido si falla la reproducción automática
+        const startAudioButton = document.createElement('button');
+        startAudioButton.style.position = 'fixed';
+        startAudioButton.style.top = '0';
+        startAudioButton.style.left = '0';
+        startAudioButton.style.opacity = '0';
+        startAudioButton.textContent = 'Iniciar Audio';
+        document.body.appendChild(startAudioButton);
 
-    // Agregar listeners para iniciar el sonido
-    document.addEventListener('click', startBackgroundSound);
-    document.addEventListener('keydown', startBackgroundSound);
-    
+        // Iniciar el sonido cuando se hace clic en cualquier parte
+        const startBackgroundSound = () => {
+          backgroundSound.play();
+          startAudioButton.remove();
+          document.removeEventListener('click', startBackgroundSound);
+          document.removeEventListener('keydown', startBackgroundSound);
+        };
+
+        document.addEventListener('click', startBackgroundSound);
+        document.addEventListener('keydown', startBackgroundSound);
+      });
+    });
+
     //Mapeo de teclas a elementos y sonidos
     const keyMap = {
       'ArrowUp': { id: 'up', sound: 'sound-up', animal: 'Jaguar' },
