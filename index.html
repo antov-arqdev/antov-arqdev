@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Key and Mouse Interaction App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Expofuturo Freinet</title>
   <style>
     body {
       display: flex;
@@ -301,23 +303,23 @@
       ' ': { id: 'space', sound: 'sound-space', animal: 'Robot' },
     };
 
-    // Objeto para rastrear el estado de las teclas y el tiempo de la última pulsación
+    // Objeto para rastrear el estado de las teclas, toques y tiempos
     const keyState = {};
-    const lastKeyPress = {};
-    const doublePressThreshold = 300; // milisegundos para detectar doble pulsación
+    const lastTouch = {};
+    const doubleTouchThreshold = 300; // milisegundos para detectar doble toque
 
     const activate = (id, soundId, animal) => {
       document.getElementById(id).classList.add('active');
       const audio = document.getElementById(soundId);
       
-      // Verificar si es una doble pulsación
+      // Verificar si es un doble toque/pulsación
       const now = Date.now();
-      if (lastKeyPress[soundId] && (now - lastKeyPress[soundId] < doublePressThreshold)) {
-        // Es una doble pulsación, reiniciar el audio
+      if (lastTouch[soundId] && (now - lastTouch[soundId] < doubleTouchThreshold)) {
+        // Es un doble toque, reiniciar el audio
         audio.currentTime = 0;
         console.log(`Reiniciando audio de ${animal}`);
       }
-      lastKeyPress[soundId] = now;
+      lastTouch[soundId] = now;
       
       audio.play();
       console.log(`Activando ${animal}:`);
@@ -331,6 +333,37 @@
       console.log(`Desactivando ${animal}`);
     };
 
+    // Función para obtener el elemento tocado
+    const getTouchedElement = (event) => {
+      const touch = event.touches[0];
+      return document.elementFromPoint(touch.clientX, touch.clientY);
+    };
+
+    // Función para obtener la información del elemento por su ID
+    const getElementInfo = (elementId) => {
+      return Object.values(keyMap).find(info => info.id === elementId);
+    };
+
+    // Manejadores de eventos táctiles para todos los personajes
+    document.querySelectorAll('.character').forEach(character => {
+      character.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevenir el comportamiento por defecto
+        const elementInfo = getElementInfo(character.id);
+        if (elementInfo) {
+          activate(elementInfo.id, elementInfo.sound, elementInfo.animal);
+        }
+      });
+
+      character.addEventListener('touchend', (e) => {
+        e.preventDefault(); // Prevenir el comportamiento por defecto
+        const elementInfo = getElementInfo(character.id);
+        if (elementInfo) {
+          deactivate(elementInfo.id, elementInfo.sound, elementInfo.animal);
+        }
+      });
+    });
+
+    // Mantener los event listeners de teclado existentes
     document.addEventListener('keydown', (e) => {
       if (keyMap[e.key] && !keyState[e.key]) {
         keyState[e.key] = true;
